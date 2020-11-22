@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="fileOpen">打开文件选择框</button>
+    <button id="saveOpen">保存文件对话框</button>
+    <img id="img" style="width:100%">
+</body>
+<script>
+    var {dialog} = require('electron').remote
+    var fs = require('fs')
+
+    var filebtn = document.querySelector('#fileOpen')
+    var savebtn = document.querySelector('#saveOpen')
+    var img = document.querySelector('#img')
+
+    filebtn.onclick = function(){
+        dialog.showOpenDialog({
+            title: '请选择ico文件111',
+            defaultPath: "menu.html",
+            filters: [{name:"html", extensions:['html', 'ico']}]
+        }).then(result=>{
+            img.setAttribute("src", result.filePaths[0])
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+    savebtn.onclick = function(){
+        dialog.showSaveDialog({
+            title: '保存文件对话框'
+        }).then(result=>{
+            console.log(result.filePath);
+            fs.writeFileSync(result.filePath, "testData")
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
+
+</script>
+</html>
